@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= name %>'s Quarantine Resume</title>
+    <link href="../css/close.css" type='text/css'/>
+    <link rel="stylesheet" href="https://unpkg.com/wingcss"/>
+    <link rel="stylesheet" href="https://unpkg.com/blocks.css/dist/blocks.min.css" />
+</head>
+<body style="background-color: #a2dbff;">
+
+    <br/>
+
+    <div class="block fixed" style="position:relative;
+    z-index: 1;
+    height: 100%;
+    min-width: 50px;
+    max-width: 1000px;
+    margin: 0 auto;">
+        
+        <h1 id="titleText" class="title" style="text-align:center">`<%= name %>'s Quarantine Resume`</h1>
+        <br/>
+        <form style="margin-left:10%; margin-right:10%">
+            <label>Full Name</label>
+            <h4 id="name" style="margin-top: 10px; margin-bottom:10px;"><%= resumeName %></h4>
+            <label>Bio</label>
+            <h4 id="bio" style="margin-top: 10px; margin-bottom:10px;">
+                <%= bio %>
+            </h4>
+
+            
+            <label id="socialLabel">Socials</label>
+            <div id='socials'></div>
+
+            <div id="socialHideout" style="display: none;"><%= socials %></div>
+            <br/>
+
+            <label id="projectLabel">The cool stuff I did during the pandemic!</label>
+            <div id='projects'></div>
+            <div id="projectHideout" style="display: none;"> <%= projects %></div>
+            <br/>
+            
+
+            <br/>
+
+            <div class="row">
+            <button id="shareButton" class="block accent" type='button' style="padding:2%; margin-left:auto; margin-right:auto; font-size:large; --block-accent-color:#3f88c5">
+                Share This Resume!
+            </button>
+            <button id="createButton" class="block accent" type='button' style="padding:2%; margin-left:auto; margin-right:auto; font-size:large; --block-accent-color:#3f88c5">
+                Create Your Resume!
+            </button>
+            </div>
+
+
+        </form>
+
+        <br/>
+    </div>
+    
+    <br/>
+    <script>
+        console.log("Script working!")
+        
+
+        var name = '<%= name %>';
+        var firstName = name.split(' ')[0]
+        console.log(firstName)
+        document.title = `${firstName}'s Quarantine Resume`
+
+        const resumeHeading = document.getElementById('titleText')
+        resumeHeading.innerHTML = `${firstName}'s Quarantine Resume`
+
+    </script>
+    <script src="js/resumeView.js"></script>
+</body>
+</html>

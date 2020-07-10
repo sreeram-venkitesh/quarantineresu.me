@@ -1,0 +1,38 @@
+{
+  "name": "quarantine-resume",
+  "version": "1.0.0",
+  "description": "A site to show off your work during the pandemic",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fillerInk/quarantine-resume.git"
+  },
+  "author": "Sreeram Venkitesh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fillerInk/quarantine-resume/issues"
+  },
+  "homepage": "https://github.com/fillerInk/quarantine-resume#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-session": "^1.4.0",
+    "cors": "^2.8.5",
+    "deta": "0.0.6",
+    "ejs": "^3.1.3",
+    "express": "^4.17.1",
+    "express-favicon": "^2.0.1",
+    "express-redirect": "^1.2.2",
+    "express-session": "^1.17.1",
+    "express-static": "^1.2.6",
+    "express-validator": "^6.5.0",
+    "heroku-ssl-redirect": "0.0.4",
+    "jquery": "^3.5.1",
+    "nodemon": "^2.0.4",
+    "passport": "^0.4.1",
+    "passport-google-oauth20": "^2.0.0"
+  }
+}

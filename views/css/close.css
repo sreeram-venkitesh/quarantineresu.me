@@ -1,0 +1,35 @@
+.x{
+    position: absolute;
+    background: red;
+    color: white;
+    top: -20px;
+    right: -10px;
+    width: auto;
+    padding-left:7px;
+    padding-right:7px;
+    height: auto;
+    padding-top: 3px;
+    padding-bottom: 3px;
+};
+
+.linkToProfile {
+    color:#000;
+}
+
+
+a {
+    text-decoration: none;
+}
+.bottomLinks:hover {
+    background-image: linear-gradient(#a2dbff 60%, rgb(107, 162, 251) 55%);
+    display: inline;
+    
+}
+
+a:visited {
+    color: #000;
+}
+
+a:link {
+    color: #000;
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quarantine Resume</title>
+    <link rel="stylesheet" href="https://unpkg.com/wingcss"/>
+    <link rel="stylesheet" href="https://unpkg.com/blocks.css/dist/blocks.min.css" />
+</head>
+<body style="background-color: #a2dbff;">
+
+    <br/>
+    <div class="block fixed" style="position:relative;
+    z-index: 1;
+    height: 100%;
+    min-width: 50px;    
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align:center;">
+        <h1 class="title" style="text-decoration:underline; text-align:center">Error <span class="em">404</span></h1>
+        <img  src="https://media1.tenor.com/images/e4d613ee59e79b93e38ec2521cce19e4/tenor.gif?itemid=5751430">
+        <h3 class='title' style="text-align: center;"> Hmm.. The page you're looking for doesn't seem to exist!</h3>
+        <button id="createButton" class="block accent" type='button' style="padding:2%; margin-left:auto; margin-right:auto; font-size:large; --block-accent-color:#3f88c5">
+            Go Back Home!
+        </button>
+        <br/>
+    
+    </div>
+    <br/>
+
+    <script >
+        var createButton = document.getElementById('createButton');
+        createButton.onclick = function() {
+            console.log('clicked!')
+            window.location = '/'
+        }
+    </script>
+</body>
+</html>

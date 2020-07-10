@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create your resume!</title>
+    <link href="./css/close.css" type='text/css'/>
+    <link rel="stylesheet" href="https://unpkg.com/wingcss"/>
+    <link rel="stylesheet" href="https://unpkg.com/blocks.css/dist/blocks.min.css" />
+</head>
+<body style="background-color: #a2dbff;">
+
+    <br/>
+    <!-- <a target="_blank" href="https://icons8.com/icons/set/resume">Resume icon</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a> -->
+    <div class="block fixed" style="position:relative;
+    z-index: 1;
+    height: 100%;
+    min-width: 50px;
+    max-width: 1000px;
+    margin: 0 auto;">
+        
+        <h1 id="titleText" class="title" style="text-align:center">Hi! Create your resume!</h1>
+        
+
+        <h5 style="text-align: center; margin-left:auto; margin-right:auto; margin-top:0px; margin-bottom:10px;">Options</h5>
+        <div class="row" style="text-align: center;">
+            <button class="outline" style="height:50px;margin-bottom:0px; margin-left: auto; font-weight:bold; font-size:larger; margin-right:5%" id="profile"> <a>Your Profile</a> </button>
+            <button class="outline" style="height:50px;margin-bottom:0px; margin-left: 5%; font-weight:bold; font-size:larger; margin-right:auto" id="logout"> <a>Logout </a> </button>
+
+        
+        </div>
+        <br/>
+        <form style="margin-left:10%; margin-right:10%" action="/resume_write" method="post" onsubmit="return checkForm()">
+            <label>Enter Your Name</label>
+            <input id="nameInput" class="block fixed" name="name" style="height: 50px; width:50%; font-size:larger; margin-left:0px;"  placeholder="Who are you?">
+
+            <label>Enter Your Bio</label>
+            <textarea id="bioInput" class="block fixed" name="bio" style="width:100%; height:200px; font-size:x-large; margin-left:0px; "  placeholder="What do you do?"></textarea>
+
+
+            <div id='socials' name="socials"></div>
+            <br/>
+            <textarea id="hiddenSocials" name="hiddenSocials" style="display: none;"></textarea>
+            <div id="socialHideout" style="display: none;"><%= socials %></div>
+            <label id="socialLabel">Add Social</label>
+            <div class='row' style="text-align:left;">
+                <input id="socialName" class="block fixed col-6" style=" height: 50px;  font-size:larger; margin-left:0px; margin-bottom:0px"  placeholder="Name (Example: GitHub)">
+                <input id="socialLink" class="block fixed col-6" style="height: 50px; font-size:larger; margin-left:0px; margin-bottom:0px"  placeholder="Link">
+                <button id="addSocialButton" type='button' class="block col-1" style="padding:1.4%; margin-left:0px; margin-right:px; font-size:large;">
+                    Add
+                </button>
+            </div>
+
+            <br/>
+
+            <div id='projects' name="projects"></div>
+            <br/>
+            <textarea id="hiddenProjects" name="hiddenProjects" style="display: none;"></textarea>
+            <div id="projectHideout" style="display: none;"> <%= projects %></div>
+            <label id="projectLabel">Add Projects/Works/Anything else that you did!</label>
+
+            <div style="display:block; text-align:left;">
+                <div class="row">
+                    <input id="projectName" class="block fixed col" style=" height: 50px; font-size:larger; margin-left:0px; margin-bottom:0px;"  placeholder="Name">
+                    <input id="projectLink" class="block fixed col" style="height: 50px; font-size:larger; margin-left:0px;  margin-bottom:0px;"  placeholder="Link (optional)">
+                    </div>
+                    <textarea id="projectDescription" class="block fixed" style="width:100%; height:200px; font-size:x-large; margin-left:0px; margin-bottom:0px;"  placeholder="What is it about?"></textarea>
+                <div class="row">
+                    <select id="projectTag" class="block fixed col-11" style="height: 50px; padding-left:10px; padding-right:10px; font-size:larger; margin-left:0px; margin-bottom:0;" placeholder="Link">
+                        <option disabled selected value> -- Select Tag -- </option>
+                        <option value='software'>Software Project</option>
+                        <option value='hardware'>Hardware Project</option>
+                        <option value='course'>Online Course</option>
+                        <option value='other'>Other</option>
+                    </select>
+                    <button id="addProjectButton" class="block col-1" type='button' style="padding:1.4%; margin-left:0px; margin-right:0px; font-size:large;">
+                        Add
+                    </button>
+                </div>
+            </div>
+
+            <br/>
+
+            <button id="createButton" class="block accent" type='submit' style="padding:2%; margin-left:auto; margin-right:auto; font-size:large; --block-accent-color:#3f88c5">
+                Create!
+            </button>
+
+        </form>
+
+        <br/>
+    </div>
+    
+    <br/>
+    <script >
+        console.log("Script working!")
+        var socialsArray = []
+        var projectsArray = []
+        
+        var titleText = document.getElementById('titleText')
+        const isFirstLogin = <%= firstLogin %>;
+        
+        const addSocialButton = document.getElementById('addSocialButton')
+        const addProjectButton = document.getElementById('addProjectButton')
+        const createButton = document.getElementById('createButton')
+        
+        var socials = document.getElementById('socials')
+        var projects = document.getElementById('projects')
+        
+        const socialLabel = document.getElementById('socialLabel')
+        const projectLabel = document.getElementById('projectLabel')
+        
+        function closeFunctionProject(button){
+            
+        
+            for (var i=0; i<projectsArray.length; i++){
+                if(projectsArray[i]['name'] === JSON.parse(button.parentElement.children[4].innerHTML)['name'])
+                {
+                    console.log('yes ith array il ind!')
+                    projectsArray.splice(i,1)
+                }
+            }
+            button.parentElement.remove()
+            console.log('removed!')
+            console.log('new projects array is')
+            console.log(projectsArray)
+            var projectTextArea = document.getElementById('hiddenProjects')
+            projectTextArea.value = JSON.stringify(projectsArray)
+            
+        }
+        
+        
+        if(isFirstLogin){
+            titleText.innerHTML = `Hi <%= name %>! Create your Resume `;
+        }else{
+            var profile = document.getElementById('profile');
+                profile.onclick = function() {
+                console.log('clicked!')
+                window.location = '/' + '<%= key %>'
+            }
+        
+            titleText.innerHTML = `Welcome back <%= name %>! Edit your Resume!`;
+            //Add code to populate the fields with values from db
+            const nameInput = document.getElementById('nameInput')
+            const bioInput = document.getElementById('bioInput')
+            console.log('podaa pattiii');
+            console.log('<%= resumeName %>');
+            nameInput.value = '<%= resumeName %>';
+            bioInput.textContent = '<%= bio %>';
+            
+            const socialHideout = document.getElementById('socialHideout')
+            const projectHideout = document.getElementById('projectHideout')
+        
+            var socialLinks = socialHideout.innerHTML
+            var projectLinks = projectHideout.innerHTML
+        
+            socialLinks = JSON.parse(socialLinks)
+            console.log(`socialLinks is ${socialLinks}`)
+            projectLinks = JSON.parse(projectLinks)
+            console.log(`projectLinks is ${projectLinks}`)
+            
+            for (var i=0; i<socialLinks.length; i++){
+                var socialButton = document.createElement('button')
+                socialButton.className='outline'
+                socialButton.type='button'
+                socialButton.style ="height:50px; margin-bottom:0px; overflow:visible; position:relative; font-weight:bold; margin-left:3px; margin-right:8px; font-size:larger"
+        
+                var social = document.createElement('a')
+                var socialLinkName = document.createTextNode(socialLinks[i]['name'])
+                
+                social.appendChild(socialLinkName)
+                social.href=socialLinks[i]['link']
+                social.target='_blank'
+        
+                var closeButtonSocial = document.createElement('button')
+                closeButtonSocial.style =' position: absolute; background: red; color: white; top: -20px; right: -10px; width: auto;padding-left:7px;padding-right:7px;height: auto; padding-top: 3px; padding-bottom: 3px;'
+                closeButtonSocial.type='button'
+                //closeButtonSocial.addEventListener('click',()=>{
+                //    closeFunctionSocial(this)
+                //})
+                var buttonText = document.createTextNode('x')
+                closeButtonSocial.appendChild(buttonText)
+        
+                socialButton.appendChild(social)
+                socialButton.appendChild(closeButtonSocial)
+                
+        
+                var dataText = {
+                    name: socialLinks[i]['name'],
+                    link:socialLinks[i]['link']
+                }
+        
+                var summary = document.createElement('p')
+                summary.innerHTML = JSON.stringify(dataText)
+                summary.style="display:none"
+                socialButton.appendChild(summary)
+        
+                socialsArray.push(dataText)
+        
+                socials.appendChild(socialButton)
+                
+                var socialTextArea = document.getElementById('hiddenSocials')
+        
+                console.log(`Currently socials is ${socialsArray}`)
+                socialTextArea.value = JSON.stringify(socialsArray)
+        
+                console.log(socialTextArea.value)
+            }
+
+        
+            for( var j=0; j<projectLinks.length; j++){
+        
+                var project = document.createElement('div')
+                project.className ='block fixed'
+                project.style='display:inline-block; padding:30px;'
+        
+                var projectName = document.createElement('H4')
+                projectName.className='title'
+                projectName.style='margin-top:0px; margin-bottom:0px; font-weight:bold'
+                var nameText = document.createTextNode(projectLinks[j]['name'])
+                projectName.appendChild(nameText)
+        
+                if(projectLink.value!=''){
+                    var link = document.createElement('a')
+                    link.className='title'
+                    link.style='margin-top:0px; margin-bottom:0px;'
+                    var linkElement = document.createElement('H5')
+                    var linkText = document.createTextNode('Link to project')
+                    linkElement.className='title'
+                    linkElement.style='margin-top:0px; margin-bottom:0px;'
+                    linkElement.appendChild(linkText)
+                    link.appendChild(linkElement)
+                    link.href = projectLinks[j]['link']
+                    link.target='_blank'
+                }
+        
+                var description = document.createElement('H5')
+                description.className='title'
+                description.style='margin-top:0px; margin-bottom:0px;'
+                var descriptionText = document.createTextNode(projectLinks[j]['description'])
+                description.appendChild(descriptionText)
+                
+                var tag = document.createElement('H5')
+                tag.className='title'
+                tag.style='margin-top:0px; margin-bottom:0px; color:blue'
+                var tagText = document.createTextNode(`Tags: ${projectLinks[j]['tag']}`)
+                tag.appendChild(tagText)
+        
+                var closeButton = document.createElement('button')
+                closeButton.style =' position: absolute; background: red; color: white; top: -20px; right: -10px; width: auto;padding-left:7px;padding-right:7px;height: auto; padding-top: 3px; padding-bottom: 3px;'
+                closeButton.type='button'
+                //closeButton.addEventListener('click',()=>{
+                    //console.log(closeButton.parentElement)
+                    //console.log(this.close)
+                   // closeFunctionProject(this)
+                //})
+                var buttonText = document.createTextNode('x')
+                closeButton.appendChild(buttonText)
+        
+                project.append(closeButton)
+                project.appendChild(projectName)
+                if(projectLink.value!=''){
+                    project.appendChild(link)
+                }
+                project.appendChild(description)
+                project.appendChild(tag)
+        
+                
+        
+                var dataText = {
+                    name: projectLinks[j]['name'],
+                    link:projectLinks[j]['link'],
+                    description:projectLinks[j]['description'],
+                    tag:projectLinks[j]['tag']
+                }
+        
+                projectsArray.push(dataText)
+        
+                var summary = document.createElement('p')
+                summary.innerHTML = JSON.stringify(dataText)
+                summary.style="display:none"
+        
+                project.appendChild(summary)
+                
+                projects.appendChild(project)
+        
+                console.log(`Currently projects is ${projectsArray}`)
+                
+        
+            
+                var projectTextArea = document.getElementById('hiddenProjects')
+        
+        
+                projectTextArea.value = JSON.stringify(projectsArray)
+        
+                console.log(projectTextArea.value)
+            }
+        
+        }
+        console.log(isFirstLogin);
+
+
+        function closeFunctionSocial(button){
+            console.log(button)
+            console.log(button.parentElement);
+            
+            for (var i=0; i<socialsArray.length; i++){
+                if(socialsArray[i]['name'] === JSON.parse(button.parentElement.children[2].innerHTML)['name'])
+                {
+                    console.log('yes ith array il ind!')
+                    socialsArray.splice(i,1)
+                }
+            }
+            button.parentElement.remove()
+            console.log('removed!')
+            console.log('new socials array is')
+            console.log(socialsArray)
+            var socialTextArea = document.getElementById('hiddenSocials')
+            socialTextArea.value = JSON.stringify(socialsArray)
+        
+        }
+                
+        addSocialButton.addEventListener('click',()=>{
+            console.log('Social add button clicked')
+        
+            
+            var socialName = document.getElementById('socialName')
+            var sociaLink = document.getElementById('socialLink')
+        
+            
+        
+            if(socialName.value==='' || 
+                socialLink.value===''){
+                    socialLabel.innerHTML = 'Please enter a valid response';
+                    setTimeout(() =>socialLabel.innerHTML="Add Social",3000);
+            }else{
+                
+                var button = document.createElement('button')
+                button.className='outline'
+                button.type='button'
+                button.style ="height:50px; margin-bottom:0px; overflow:visible; position:relative; font-weight:bold; margin-left:3px; margin-right:8px; font-size:larger"
+        
+                var social = document.createElement('a')
+                var name = document.createTextNode(socialName.value)
+                
+                social.appendChild(name)
+                social.href=socialLink.value
+                social.target='_blank'
+        
+                var closeButtonSocial = document.createElement('button')
+                closeButtonSocial.style =' position: absolute; background: red; color: white; top: -20px; right: -10px; width: auto;padding-left:7px;padding-right:7px;height: auto; padding-top: 3px; padding-bottom: 3px;'
+                closeButtonSocial.type='button'
+                closeButtonSocial.addEventListener('click',()=>{
+                    closeFunctionSocial(closeButtonSocial)
+                })
+                var buttonText = document.createTextNode('x')
+                closeButtonSocial.appendChild(buttonText)
+        
+                button.appendChild(social)
+                button.appendChild(closeButtonSocial)
+                
+        
+                var dataText = {
+                    name: socialName.value,
+                    link:socialLink.value
+                }
+        
+                var summary = document.createElement('p')
+                summary.innerHTML = JSON.stringify(dataText)
+                summary.style="display:none"
+                button.appendChild(summary)
+        
+                socialsArray.push(dataText)
+        
+                socials.appendChild(button)
+                
+                var socialTextArea = document.getElementById('hiddenSocials')
+        
+                console.log(`Currently socials is ${socialsArray}`)
+                socialTextArea.value = JSON.stringify(socialsArray)
+        
+                console.log(socialTextArea.value)
+
+                socialName.value = ''
+                socialLink.value = ''
+        
+            }
+            
+        })
+        
+        addProjectButton.addEventListener('click',()=>{
+            console.log('Project add button clicked')
+        
+            var projectName = document.getElementById('projectName')
+            var projectLink = document.getElementById('projectLink')
+            var projectDescription = document.getElementById('projectDescription')
+            var projectTag = document.getElementById('projectTag')
+        
+            console.log(`Project Name is ${projectName.value}`)
+            console.log(`Project Link is ${projectLink.value}`)
+            console.log(`Project Description is ${projectDescription.value}`)
+            console.log(`Project Tag is ${projectTag.value}`)
+        
+            if(projectName.value==='' || 
+                projectDescription.value==='' || 
+                projectTag.value===''){
+                    projectLabel.innerHTML = 'Please enter a valid response';
+                    setTimeout(() =>projectLabel.innerHTML="Add Projects/Works/Anything else that you did!",3000);
+            }else{
+        
+                var project = document.createElement('div')
+                project.className ='block fixed'
+                project.style='display:inline-block; padding:30px;'
+        
+                var name = document.createElement('H4')
+                name.className='title'
+                name.style='margin-top:0px; margin-bottom:0px; font-weight:bold'
+                var nameText = document.createTextNode(projectName.value)
+                name.appendChild(nameText)
+        
+                if(projectLink.value!=''){
+                    var link = document.createElement('a')
+                    link.className='title'
+                    link.style='margin-top:0px; margin-bottom:0px;'
+                    var linkElement = document.createElement('H5')
+                    var linkText = document.createTextNode('Link to project')
+                    linkElement.className='title'
+                    linkElement.style='margin-top:0px; margin-bottom:0px;'
+                    linkElement.appendChild(linkText)
+                    link.appendChild(linkElement)
+                    link.href = projectLink.value
+                    link.target='_blank'
+                }
+        
+                var description = document.createElement('H5')
+                description.className='title'
+                description.style='margin-top:0px; margin-bottom:0px;'
+                var descriptionText = document.createTextNode(projectDescription.value)
+                description.appendChild(descriptionText)
+                
+                var tag = document.createElement('H5')
+                tag.className='title'
+                tag.style='margin-top:0px; margin-bottom:0px; color:blue'
+                var tagText = document.createTextNode(`Tags: ${projectTag.value}`)
+                tag.appendChild(tagText)
+        
+                var closeButton = document.createElement('button')
+                closeButton.style =' position: absolute; background: red; color: white; top: -20px; right: -10px; width: auto;padding-left:7px;padding-right:7px;height: auto; padding-top: 3px; padding-bottom: 3px;'
+                closeButton.type='button'
+                closeButton.addEventListener('click',()=>{
+                    closeFunctionProject(closeButton)
+                })
+                var buttonText = document.createTextNode('x')
+                closeButton.appendChild(buttonText)
+        
+                project.append(closeButton)
+                project.appendChild(name)
+                if(projectLink.value!=''){
+                    project.appendChild(link)
+                }
+                project.appendChild(description)
+                project.appendChild(tag)
+        
+                
+        
+                var dataText = {
+                    name: projectName.value,
+                    link:projectLink.value,
+                    description:projectDescription.value,
+                    tag:projectTag.value
+                }
+        
+                projectsArray.push(dataText)
+        
+                var summary = document.createElement('p')
+                summary.innerHTML = JSON.stringify(dataText)
+                summary.style="display:none"
+        
+                project.appendChild(summary)
+                
+                projects.appendChild(project)
+        
+                console.log(`Currently projects is ${projectsArray}`)
+                
+        
+            
+                var projectTextArea = document.getElementById('hiddenProjects')
+        
+        
+                projectTextArea.value = JSON.stringify(projectsArray)
+        
+                console.log(projectTextArea.value)
+
+                projectName.value = ''
+                projectLink.value = ''
+                projectDescription.value = ''
+                projectTag.selectedIndex = '0'
+            }
+        
+        })
+        
+        //function closer(closeButton){
+         //   closeFunctionSocial(closeButton)
+        //}
+
+        for (var k=0; k<socials.childElementCount;k++){
+           // console.log(`Setting click function of ${k+1}`)
+            
+            var close = socials.children[k].children[1]
+           // console.log(close)
+            close.addEventListener('click',()=>{
+                console.log(event.target);
+                console.log(JSON.parse(event.target.parentElement.children[2].innerHTML)['name'])
+                closeFunctionSocial(event.target)
+            })
+        }
+
+        for (var k=0; k<projects.childElementCount;k++){
+            console.log(`Setting click function of ${k+1}`)
+            
+            var close = projects.children[k].children[0]
+            console.log(close)
+            close.addEventListener('click',()=>{
+                console.log(event.target);
+                console.log(JSON.parse(event.target.parentElement.children[4].innerHTML)['name'])
+                closeFunctionProject(event.target)
+            })
+        }
+
+        
+
+        
+        
+        
+        var logout = document.getElementById('logout');
+        logout.onclick = function() {
+            console.log('clicked!')
+            window.location = '/logout'
+        }
+        
+        
+        
+        function checkForm(){
+            if(nameInput.value === '' || bioInput.value==='' || socialsArray.length===0 || projectsArray.length===0 ){
+                alert('Please fill the details properly!')
+                return false
+            }else{
+                return true
+            }
+        }
+
+    </script>
+</body>
+</html>
