@@ -23,7 +23,7 @@
     "cors": "^2.8.5",
     "deta": "0.0.6",
     "ejs": "^3.1.3",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-favicon": "^2.0.1",
     "express-redirect": "^1.2.2",
     "express-session": "^1.17.1",
